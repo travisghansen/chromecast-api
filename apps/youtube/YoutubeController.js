@@ -1,11 +1,11 @@
-const Castv2Client = require('castv2-client')
+const Castv2Client = require('../../lib/castv2-client')
 const RequestResponseController = Castv2Client.RequestResponseController
 const YoutubeRemote = require('youtube-remote')
 
 const YOUTUBE_URN = 'urn:x-cast:com.google.youtube.mdx'
 
 class YoutubeController extends RequestResponseController {
-  constructor (client, sourceId, destinationId) {
+  constructor(client, sourceId, destinationId) {
     super(client, sourceId, destinationId, YOUTUBE_URN)
 
     const self = this
@@ -18,7 +18,7 @@ class YoutubeController extends RequestResponseController {
     })
   }
 
-  load (videoId, callback) {
+  load(videoId, callback) {
     if (!callback) callback = noop
 
     this.playVideo(videoId, function (err, res) {
@@ -27,7 +27,7 @@ class YoutubeController extends RequestResponseController {
     })
   }
 
-  playVideo (videoId, listId, callback) {
+  playVideo(videoId, listId, callback) {
     if (typeof listId === 'function') {
       callback = listId
       listId = ''
@@ -44,23 +44,23 @@ class YoutubeController extends RequestResponseController {
     })
   }
 
-  addToQueue (videoId) {
+  addToQueue(videoId) {
     this.remote.addToQueue(videoId)
   }
 
-  playNext (videoId) {
+  playNext(videoId) {
     this.remote.playNext(videoId)
   }
 
-  removeVideo (videoId) {
+  removeVideo(videoId) {
     this.remote.removeVideo(videoId)
   }
 
-  clearPlaylist () {
+  clearPlaylist() {
     this.remote.clearPlaylist()
   }
 
-  _getScreenId (callback) {
+  _getScreenId(callback) {
     if (!callback) callback = noop
 
     const self = this
@@ -79,12 +79,12 @@ class YoutubeController extends RequestResponseController {
     })
   }
 
-  _controlRequest (data, callback) {
+  _controlRequest(data, callback) {
     const self = this
 
     this.on('message', onMessage)
 
-    function onMessage (response) {
+    function onMessage(response) {
       self.removeListener('message', onMessage)
 
       if (response.type === 'INVALID_REQUEST') {
@@ -99,7 +99,7 @@ class YoutubeController extends RequestResponseController {
   }
 }
 
-function noop () {}
+function noop() {}
 
 // Hack for 'castv2-client'
 module.exports = (...args) => new YoutubeController(...args)

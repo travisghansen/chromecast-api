@@ -1,10 +1,10 @@
-const Castv2Client = require('castv2-client')
+const Castv2Client = require('../../lib/castv2-client')
 const Application = Castv2Client.Application
 const MediaController = Castv2Client.MediaController
 const YoutubeController = require('./YoutubeController')
 
 class Youtube extends Application {
-  constructor (client, session) {
+  constructor(client, session) {
     super(client, session)
 
     this.media = this.createController(MediaController)
@@ -17,29 +17,31 @@ class Youtube extends Application {
     })
   }
 
-  static get APP_ID () { return '233637DE' }
+  static get APP_ID() {
+    return '233637DE'
+  }
 
-  getStatus (callback) {
+  getStatus(callback) {
     this.media.getStatus.apply(this.media, arguments)
   }
 
-  load (videoId) {
+  load(videoId) {
     this.youtube.load.apply(this.youtube, arguments)
   }
 
-  play (callback) {
+  play(callback) {
     this.media.play.apply(this.media, arguments)
   }
 
-  pause (callback) {
+  pause(callback) {
     this.media.pause.apply(this.media, arguments)
   }
 
-  stop (callback) {
+  stop(callback) {
     this.media.stop.apply(this.media, arguments)
   }
 
-  seek (currentTime, callback) {
+  seek(currentTime, callback) {
     this.media.seek.apply(this.media, arguments)
   }
 }

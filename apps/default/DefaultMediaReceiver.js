@@ -1,9 +1,10 @@
 const mime = require('mime')
 
-const DefaultMediaReceiver = require('castv2-client').DefaultMediaReceiver
+const DefaultMediaReceiver =
+  require('../../lib/castv2-client').DefaultMediaReceiver
 
 class DefaultMediaReceiverApp extends DefaultMediaReceiver {
-  load (resource, opts, callback) {
+  load(resource, opts, callback) {
     if (!callback) callback = noop
 
     let media = {}
@@ -15,7 +16,7 @@ class DefaultMediaReceiverApp extends DefaultMediaReceiver {
 
       media = {
         contentId: resource,
-        contentType: mimeType || 'video/mp4'
+        contentType: mimeType || 'video/mp4',
       }
     } else {
       // By default
@@ -24,7 +25,7 @@ class DefaultMediaReceiverApp extends DefaultMediaReceiver {
 
       media = {
         contentId: resource.url,
-        contentType: mimeType || 'video/mp4'
+        contentType: mimeType || 'video/mp4',
       }
 
       if (resource.subtitles) {
@@ -39,7 +40,7 @@ class DefaultMediaReceiverApp extends DefaultMediaReceiver {
             trackContentType: 'text/vtt',
             name: subs.name,
             language: subs.language,
-            subtype: 'SUBTITLES'
+            subtype: 'SUBTITLES',
           })
           i++
         }
@@ -60,18 +61,26 @@ class DefaultMediaReceiverApp extends DefaultMediaReceiver {
           type: 0,
           metadataType: 0,
           title: resource.cover.title,
-          images: [{
-            url: resource.cover.url
-          }]
+          images: [
+            {
+              url: resource.cover.url,
+            },
+          ],
         }
       }
     }
 
     // If it's a video or audio file
-    if (media.contentType.indexOf('video') !== -1 || media.contentType.indexOf('audio') !== -1) {
+    if (
+      media.contentType.indexOf('video') !== -1 ||
+      media.contentType.indexOf('audio') !== -1
+    ) {
       options.autoplay = true
       options.currentTime = opts.startTime || 0
     }
+
+    // BUFFERED | LIVE
+    media.streamType = resource.streamType || 'BUFFERED'
 
     DefaultMediaReceiver.prototype.load.call(this, media, options, callback)
   }
@@ -79,4 +88,4 @@ class DefaultMediaReceiverApp extends DefaultMediaReceiver {
 
 module.exports = DefaultMediaReceiverApp
 
-function noop () {}
+function noop() {}
